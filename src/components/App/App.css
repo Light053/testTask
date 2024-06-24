@@ -1,0 +1,17 @@
+body {
+  background-color: rgb(214, 214, 214);
+  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+  max-width: 1200px;
+  margin: 0 auto;
+  min-height: 100vh;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0px;
+  padding: 0px;
+}
+
+.content-page {
+  margin-top: 60px;
+}
