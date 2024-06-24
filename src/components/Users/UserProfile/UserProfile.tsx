@@ -1,33 +1,33 @@
 import { useEffect, useState } from 'react';
-import { useParams } from 'react-router';
-import { UserData } from './types';
+import { useParams } from 'react-router-dom';
 import axios from 'axios';
+import { UserData } from './types';
 import './UserProfile.css';
 
 export const UserProfile = () => {
-  const { id } = useParams();
+  const { id } = useParams<{ id: string }>();
   const [user, setUser] = useState<UserData | null>(null);
   const [loading, setLoading] = useState(true);
 
-  const fetchUser = async () => {
-    try {
-      const response = await axios.get(
-        'https://jsonplaceholder.typicode.com/users/' + id
-      );
-      setUser(response.data);
-      setLoading(false);
-    } catch (error) {
-      console.error('Error fetching user:', error);
-      setLoading(false);
-    }
-  };
-
   useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        const response = await axios.get<UserData>(
+          `https://jsonplaceholder.typicode.com/users/${id}`
+        );
+        setUser(response.data);
+        setLoading(false);
+      } catch (error) {
+        console.error('Error fetching user:', error);
+        setLoading(false);
+      }
+    };
+
     fetchUser();
-  }, []);
+  }, [id]);
 
   if (loading) {
-    return <div>Loading...</div>;
+    return <div className="user-profile__loading">Loading...</div>;
   }
 
   return (

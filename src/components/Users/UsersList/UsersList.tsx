@@ -1,8 +1,7 @@
 import './UserList.css';
 import axios from 'axios';
 import { useEffect, useState } from 'react';
-import { NavLink, useNavigate } from 'react-router-dom';
-import { RouterPath } from '../../../router/config';
+import { useNavigate } from 'react-router-dom';
 
 interface UserData {
   id: number;
@@ -13,24 +12,23 @@ interface UserData {
 
 export const UsersList = () => {
   const [users, setUsers] = useState<UserData[]>([]);
-  const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
-
-  const fetchUsers = async () => {
-    try {
-      const response = await axios.get<UserData[]>(
-        'https://jsonplaceholder.typicode.com/users'
-      );
-
-      setLoading(false);
-      setUsers(response.data);
-    } catch (error) {
-      setLoading(false);
-      console.error('Error fetching users:', error);
-    }
-  };
+  const navigate = useNavigate();
 
   useEffect(() => {
+    const fetchUsers = async () => {
+      try {
+        const response = await axios.get<UserData[]>(
+          'https://jsonplaceholder.typicode.com/users'
+        );
+        setUsers(response.data);
+      } catch (error) {
+        console.error('Error fetching users:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
     fetchUsers();
   }, []);
 
@@ -38,9 +36,9 @@ export const UsersList = () => {
     <div className="user-list">
       <h1>Users List</h1>
       {loading ? (
-        <div>loading...</div>
+        <div className="loading">Loading...</div>
       ) : (
-        <ul>
+        <ul className="user-list__container">
           {users.map((user) => (
             <li key={user.id} className="user-list__item">
               <h2
