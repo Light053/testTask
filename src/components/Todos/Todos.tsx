@@ -19,11 +19,7 @@ export const Todos = () => {
     }
   };
 
-  const setComplete = (e: React.SyntheticEvent<EventTarget>) => {
-    if (!(e.target instanceof HTMLButtonElement)) {
-      return;
-    }
-    const id = Number(e.target.dataset.id);
+  const setComplete = (id: number) => {
     setTodos(
       todos.map((todo) =>
         todo.id === id ? { ...todo, completed: !todo.completed } : todo
@@ -38,7 +34,7 @@ export const Todos = () => {
         {todos.map((todo) => (
           <li
             key={todo.id}
-            onClick={setComplete}
+            onClick={() => setComplete(todo.id)}
             className={classNames('todo', { completed: todo.completed })}
           >
             <span className="todo-title">{todo.title}</span>
