@@ -4,12 +4,14 @@ import './App.css';
 
 function App() {
   return (
-    <main className="App">
+    <>
       <Navbar />
-      <div className="content-page">
-        <AppRouter />
-      </div>
-    </main>
+      <main className="App">
+        <div className="content-page">
+          <AppRouter />
+        </div>
+      </main>
+    </>
   );
 }
 

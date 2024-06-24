@@ -13,6 +13,7 @@ interface UserData {
 export const UsersList = () => {
   const [users, setUsers] = useState<UserData[]>([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -23,6 +24,7 @@ export const UsersList = () => {
         );
         setUsers(response.data);
       } catch (error) {
+        setError('Error fetching users.');
         console.error('Error fetching users:', error);
       } finally {
         setLoading(false);
@@ -37,6 +39,10 @@ export const UsersList = () => {
       <h1>Users List</h1>
       {loading ? (
         <div className="loading">Loading...</div>
+      ) : error ? (
+        <div className="error">{error}</div>
+      ) : users.length === 0 ? (
+        <div className="no-users">No users found</div>
       ) : (
         <ul className="user-list__container">
           {users.map((user) => (

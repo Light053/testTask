@@ -8,6 +8,7 @@ export const UserProfile = () => {
   const { id } = useParams<{ id: string }>();
   const [user, setUser] = useState<UserData | null>(null);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -16,9 +17,10 @@ export const UserProfile = () => {
           `https://jsonplaceholder.typicode.com/users/${id}`
         );
         setUser(response.data);
-        setLoading(false);
       } catch (error) {
+        setError('Error fetching user data.');
         console.error('Error fetching user:', error);
+      } finally {
         setLoading(false);
       }
     };
@@ -30,34 +32,42 @@ export const UserProfile = () => {
     return <div className="user-profile__loading">Loading...</div>;
   }
 
+  if (error) {
+    return <div className="user-profile__error">{error}</div>;
+  }
+
+  if (!user) {
+    return <div className="user-profile__not-found">User not found.</div>;
+  }
+
   return (
     <div className="user-profile">
-      <h1 className="user-profile__name">{user?.name}</h1>
+      <h1 className="user-profile__name">{user.name}</h1>
       <img
         src={`https://i.pravatar.cc/150?img=${id}`}
-        alt={user?.name}
+        alt={user.name}
         className="user-profile__avatar"
       />
-      <p className="user-profile__username">@{user?.username}</p>
+      <p className="user-profile__username">@{user.username}</p>
       <p className="user-profile__bio">
-        Hi, I’m {user?.name}. I live in {user?.address.city}, and work at{' '}
-        {user?.company.name}.
+        Hi, I’m {user.name}. I live in {user.address.city}, and work at{' '}
+        {user.company.name}.
       </p>
       <div className="user-profile__contact">
         <p>
-          Email: <a href={`mailto:${user?.email}`}>{user?.email}</a>
+          Email: <a href={`mailto:${user.email}`}>{user.email}</a>
         </p>
         <p>
-          Phone: <a href={`tel:${user?.phone}`}>{user?.phone}</a>
+          Phone: <a href={`tel:${user.phone}`}>{user.phone}</a>
         </p>
         <p>
           Website:{' '}
           <a
-            href={`http://${user?.website}`}
+            href={`http://${user.website}`}
             target="_blank"
             rel="noopener noreferrer"
           >
-            {user?.website}
+            {user.website}
           </a>
         </p>
       </div>

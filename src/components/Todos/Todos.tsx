@@ -19,7 +19,11 @@ export const Todos = () => {
     }
   };
 
-  const setComplete = (id: number) => {
+  const setComplete = (e: React.SyntheticEvent<EventTarget>) => {
+    if (!(e.target instanceof HTMLButtonElement)) {
+      return;
+    }
+    const id = Number(e.target.dataset.id);
     setTodos(
       todos.map((todo) =>
         todo.id === id ? { ...todo, completed: !todo.completed } : todo
@@ -34,14 +38,14 @@ export const Todos = () => {
         {todos.map((todo) => (
           <li
             key={todo.id}
-            onClick={() => setComplete(todo.id)}
+            onClick={setComplete}
             className={classNames('todo', { completed: todo.completed })}
           >
             <span className="todo-title">{todo.title}</span>
           </li>
         ))}
       </ul>
-      <form className="todo-form">
+      <form className="todo-form" onSubmit={addTodo}>
         {error && <p className="error">{error}</p>}
         <input
           type="text"
@@ -49,8 +53,7 @@ export const Todos = () => {
           value={value}
           onChange={(e) => setValue(e.target.value)}
         />
-
-        <button onClick={addTodo}>Add Todo</button>
+        <button type="submit">Add Todo</button>
       </form>
     </div>
   );
