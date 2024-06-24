@@ -6,11 +6,17 @@ import './Todos.css';
 export const Todos = () => {
   const [todos, setTodos] = useState<Todo[]>(initialTodos);
   const [value, setValue] = useState<string>('');
+  const [error, setError] = useState<string>('');
 
   const addTodo = (e: React.FormEvent) => {
     e.preventDefault();
-    setTodos([...todos, { title: value, completed: false, id: Date.now() }]);
-    setValue('');
+    if (value !== '') {
+      setTodos([...todos, { title: value, completed: false, id: Date.now() }]);
+      setValue('');
+      setError('');
+    } else {
+      setError('Title cannot be empty');
+    }
   };
 
   const setComplete = (id: number) => {
@@ -36,12 +42,14 @@ export const Todos = () => {
         ))}
       </ul>
       <form className="todo-form">
+        {error && <p className="error">{error}</p>}
         <input
           type="text"
           placeholder="todo title"
           value={value}
           onChange={(e) => setValue(e.target.value)}
         />
+
         <button onClick={addTodo}>Add Todo</button>
       </form>
     </div>
